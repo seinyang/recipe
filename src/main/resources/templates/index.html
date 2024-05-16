@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
+    <link href="/m-css-st.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+</head>
+
+<body>
+<div>
+    <div class="r-card">
+        <div class="r-top">
+
+            <!-- <div class="fs80" style="">
+                    <a href="" class="grey55">
+                        <img src="/imgs/P_menu.svg" style="width:100%; height:7rem;">
+                    </a>
+            </div> -->
+
+            <div class="mt1" style="width:50%;">
+                <a href="" class="grey55">
+                    <img src="/imgs/P_logo.svg" style="width:100%;">
+                </a>
+            </div>
+
+            <!-- <div class="fs80">
+                <a href="" class="grey55">
+                    <img src="/imgs/P_search.svg" style="width:100%; height:88px;">
+                </a>
+            </div> -->
+        </div>
+
+        <div class="search-container">
+            <!-- 검색창 -->
+            <form id="searchForm" onsubmit="executeSearch(); return false;" class="formform">
+                <input type="text" id="searchInput" placeholder="레시피를 검색 해보세요" class="searchst">
+                <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <!-- 검색 결과 팝업 -->
+        <div id="searchPopup" class="search-popup" onclick="closePopup(event)">
+            <div class="search-results" id="searchResults">
+                <!-- 여기에 검색 결과가 동적으로 표시됩니다. -->
+            </div>
+        </div>
+
+        <script>
+            // 검색 실행 함수
+            function executeSearch() {
+                // 검색어 가져오기
+                var searchInput = document.getElementById('searchInput').value;
+                // 검색 결과 가져오기 (여기에 검색 결과를 가져오는 코드를 추가하세요)
+
+                // 검색 결과를 받아온 후 처리 (가정)
+                var searchResults = "<h3>검색 결과</h3>";
+                searchResults += "<p>입력한 검색어: " + searchInput + "</p>";
+                // 여기에 실제 검색 결과를 동적으로 생성하는 코드를 추가하세요.
+
+                // 검색 결과를 팝업에 표시
+                document.getElementById('searchResults').innerHTML = searchResults;
+
+                // 검색 결과 팝업을 보이도록 설정
+                document.getElementById('searchPopup').style.right = '0';
+            }
+
+            // 검색 결과 팝업을 닫는 함수
+            function closePopup(event) {
+                // 팝업 영역을 클릭한 경우에만 팝업을 닫습니다.
+                if (event.target.id === 'searchPopup') {
+                    document.getElementById('searchPopup').style.right = '-300px';
+                }
+            }
+        </script>
+
+        <div>
+            <img src="/imgs/P_mainimg.png" style="width:100%; border-radius:1rem;">
+        </div>
+        <div class="fs24 tac mt2 mb2 lsm10 grey77">
+            Category
+        </div>
+        <div class="r-category-area mb2">
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg1o">
+                    <img src="/imgs/P_category_1.jpg" style="width:100%; ">
+                    미인차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg2o">
+                    <img src="/imgs/P_category_2.jpg" style="width:100%; ">
+                    회춘차
+                </div>
+            </a>
+            <a href="/page.html" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg3o">
+                    <img src="/imgs/P_category_3.jpg" style="width:100%; ">
+                    원기회복차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg4o">
+                    <img src="/imgs/P_category_4.jpg" style="width:100%; ">
+                    면역차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg5o">
+                    <img src="/imgs/P_category_5.jpg" style="width:100%; ">
+                    항염차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg6o">
+                    <img src="/imgs/P_category_6.jpg" style="width:100%; ">
+                    위장차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg7o">
+                    <img src="/imgs/P_category_7.jpg" style="width:100%; ">
+                    안정차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg8o">
+                    <img src="/imgs/P_category_8.jpg" style="width:100%; ">
+                    환절기차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg9o">
+                    <img src="/imgs/P_category_9.jpg" style="width:100%; ">
+                    눈맑차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg10o">
+                    <img src="/imgs/P_category_10.jpg" style="width:100%; ">
+                    매일차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg11o">
+                    <img src="/imgs/P_category_11.jpg" style="width:100%; ">
+                    약손차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg12o">
+                    <img src="/imgs/P_category_12.jpg" style="width:100%; ">
+                    항암차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg13o">
+                    <img src="/imgs/P_category_13.jpg" style="width:100%; ">
+                    혈당차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg14o">
+                    <img src="/imgs/P_category_14.jpg" style="width:100%; ">
+                    혈압차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg15o">
+                    <img src="/imgs/P_category_15.jpg" style="width:100%; ">
+                    심혈관차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg16o">
+                    <img src="/imgs/P_category_16.jpg" style="width:100%; ">
+                    갑상선차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg17o">
+                    <img src="/imgs/P_category_17.jpg" style="width:100%; ">
+                    관절염차
+                </div>
+            </a>
+            <a href="" style="text-decoration-line: none;">
+                <div class="r-category-card r-c-bg18o">
+                    <img src="/imgs/P_category_18.jpg" style="width:100%; ">
+                    부인차
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
+    <link href="/m-css-st.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+</head>
+
+<body>
+<div>
+    <div class="r-card tac">
+        <div class="r-nevi-icon">
+            <div>
+                <a href="" class="fs32 grey55"><</a>
+            </div>
+            <div class="fs36 lsm25 fw1 mt2 grey55">
+                07     <!-- 레시피 넘버 -->
+            </div>
+            <div>
+                <a href="" class="fs32 grey55">></i></a>
+            </div>
+        </div>
+
+        <div class="ulm"></div>
+        <div>
+            <div class="fs24 lsm10 mt1 grey77">예뻐지는 미인차</div> <!-- 카테고리명 -->
+            <div class="fs48 lsm25 mtm05 mb1">오매, 산수유차</div> <!-- 레시피명 -->
+        </div>
+        <div class="r-effect"> <!-- 효능 -->
+            <div class="r-effect-round r-c-bg1">
+                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;">다이어트</a>
+            </div>
+            <div class="r-effect-round r-c-bg1">
+                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;">디톡스</a>
+            </div>
+            <div class="r-effect-round r-c-bg1">
+                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;">피부미용</a>
+            </div>
+        </div>
+        <div class="containerb">
+            <div class="layer_pop_txt" id="pop_txt1">
+                <div class="pop_content">
+                    <div class="title">
+                        <b>다이어트</b>와(과) 같은 효능을 지닌 차 목록
+                    </div>
+                    <ul class="popup-list grey55">
+                        <li>항목 1</li>
+                        <li>항목 2</li>
+                        <li>항목 3</li>
+                        <li>항목 4</li>
+                        <li>항목 5</li>
+                        <li>항목 6</li>
+                        <li>항목 7</li>
+                        <li>항목 8</li>
+                        <li>항목 9</li>
+                        <li>항목 10</li>
+                        <li>항목 11</li>
+                        <li>항목 12</li>
+                        <li>항목 13</li>
+                        <li>항목 14</li>
+                        <li>항목 15</li>
+                        <li>항목 16</li>
+                        <li>항목 17</li>
+                        <li>항목 18</li>
+                        <li>항목 19</li>
+                        <li>항목 20</li>
+                        <li>항목 21</li>
+                        <li>항목 22</li>
+                        <li>항목 23</li>
+                        <li>항목 24</li>
+                        <li>항목 25</li>
+                        <li>항목 26</li>
+                        <li>항목 27</li>
+                        <li>항목 28</li>
+                        <li>항목 29</li>
+                        <li>항목 30</li>
+                        <li>항목 31</li>
+                        <li>항목 32</li>
+                        <li>항목 33</li>
+                        <li>항목 34</li>
+                        <li>항목 35</li>
+                        <li>항목 36</li>
+                        <li>항목 37</li>
+                        <li>항목 38</li>
+                        <li>항목 39</li>
+                        <li>항목 40</li>
+                    </ul>
+                    <div>
+                        <a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">닫기</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="fw5 fs24 grey77 mt2"> 재료</div>
+        <div class="ulm"></div>
+        <div class="r-icon lsm10 mt05">
+            <div class="r-icond">
+                <img src="/imgs/I_iwater.svg">
+            </div>
+            <div class="tal grey55"> <!-- 재료 중 물양 -->
+                물양 : 2리터
+            </div>
+        </div>
+        <div class="r-icon lsm10 mtm05">
+            <div class="r-icond">
+                <img src="/imgs/I_ome.svg">
+            </div>
+            <div class="tal grey55"> <!-- 재료 중 물양 -->
+                오매 : 150g
+            </div>
+        </div>
+        <div class="r-icon lsm10 mtm05">
+            <div class="r-icond">
+                <img src="/imgs/I_isansooyoo.svg">
+            </div>
+            <div class="tal grey55"> <!-- 재료 중 물양 -->
+                말린 산수유 : 75g
+            </div>
+        </div>
+
+        <div class="r-image">
+            <img src="/imgs/P_ome.png">
+        </div>
+        <div class="fw5 fs24 grey77">만드는 순서</div>
+        <div class="ulm"></div>
+        <div class="tal grey55 pl2 pr2">
+            01. 물 2L와 준비된 재료를 대형 바스켓에 넣어주세요.
+            <br>02. 우림모드로 가열해 주세요.
+        </div>
+        <div class="ulm"></div>
+        <a href="/templates/index.html" class="grey55">
+            <div class="r-main-btn mt2 mb2">
+                처음으로
+            </div>
+        </a>
+
+    </div>
+</div>
+
+
+</body>
+<script>
+    //팝업창 열기
+    function openPopup(obj) {
+        $(".layer_pop_txt").hide();
+        $(obj).show();
+    }
+
+    //팝업창 닫기
+    function closePopup(obj) {
+        $(obj).hide();
+    }
+
+</script>
+</html>
