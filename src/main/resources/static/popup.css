@@ -1,0 +1,19 @@
+/*?? css*/
+* {margin:0; padding:0;}
+a {color: #666; text-decoration: none; cursor: pointer;}
+li, dt, dd {list-style: none;}
+
+/*??*/
+.containerb{width: 100%; padding: 20px 0;}
+
+/*?? ??*/
+.pop_button{width:150px; height:40px; margin: 20px auto; 
+background:skyblue; text-align: center; border-radius: 7px;}
+.pop_button a{display: block; color: #333;line-height: 40px; font-weight: bold;}
+
+/*???*/
+.layer_pop_txt{display: none; position: fixed; width: 100%; height: 100%; 
+top: 0; left: 0; background: rgba(0,0,0,0.7)}
+.layer_pop_txt .pop_content{position:absolute; width:70%; top:20%; left:15%; 
+z-index: 20; background: #fff; text-align: center; padding: 30px 0;}
+.layer_pop_txt .close_btn{position: absolute; top: 10px; right: 15px; font-size: 20px;}

@@ -15,5 +15,9 @@ public class Controller {
 
         return "page";
     }
+    @GetMapping ("/popup")
+    public String popup(){
 
+        return "popup";
+    }
 }
