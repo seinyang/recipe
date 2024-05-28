@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper
 public interface RecipeMapper {
 
-    @Select("SELECT * FROM dbo.")
+    //@Select("select * from 조리법")
     List<Recipe> findAll();
+
+
 }
