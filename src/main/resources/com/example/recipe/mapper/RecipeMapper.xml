@@ -3,7 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.recipe.mapper.RecipeMapper">
-    <select id="findAll" resultType="com.example.recipe.dto.Recipe">
+    <select id="findAll" resultType="com.example.recipe.dto.Base">
         SELECT * FROM 베이스;
     </select>
+    <select id="findBase" parameterType="int"  resultType="com.example.recipe.dto.Base">
+        SELECT * FROM 베이스 where 항목일련번호 = #{항목일련번호};
+    </select>
+    <select id="findEffects" parameterType="int"  resultType="com.example.recipe.dto.Effect">
+        SELECT * FROM 효과 where 항목일련번호 = #{항목일련번호};
+    </select>
+    <select id="findIngredients" parameterType="int"  resultType="com.example.recipe.dto.Ingredient">
+        SELECT * FROM 재료 where 항목일련번호 = #{항목일련번호} ORDER BY 재료순서;
+    </select>
+    <select id="findRecipes" parameterType="int"  resultType="com.example.recipe.dto.Recipe">
+        SELECT * FROM 조리법 where 항목일련번호 = #{항목일련번호} ORDER BY 조리순서;
+    </select>
+    <select id="findByNumberAndName" parameterType="map" resultType="com.example.recipe.dto.Base">
+        SELECT * FROM 베이스
+        WHERE (#{항목일련번호} IS NULL OR 항목일련번호 = #{항목일련번호})
+          AND (#{이름} IS NULL OR 이름 = #{이름});
+    </select>
+
 </mapper>

@@ -48,27 +48,34 @@
         </div>
 
         <script>
-            // 검색 실행 함수
             function executeSearch() {
-                // 검색어 가져오기
                 var searchInput = document.getElementById('searchInput').value;
-                // 검색 결과 가져오기 (여기에 검색 결과를 가져오는 코드를 추가하세요)
+                var searchParam = isNaN(searchInput) ? { 이름: searchInput } : { 항목일련번호: searchInput };
 
-                // 검색 결과를 받아온 후 처리 (가정)
-                var searchResults = "<h3>검색 결과</h3>";
-                searchResults += "<p>입력한 검색어: " + searchInput + "</p>";
-                // 여기에 실제 검색 결과를 동적으로 생성하는 코드를 추가하세요.
-
-                // 검색 결과를 팝업에 표시
-                document.getElementById('searchResults').innerHTML = searchResults;
-
-                // 검색 결과 팝업을 보이도록 설정
-                document.getElementById('searchPopup').style.right = '0';
+                $.ajax({
+                    url: "/search",
+                    type: "GET",
+                    data: searchParam,
+                    success: function(data) {
+                        var searchResults = "<h3>검색 결과</h3>";
+                        if (data.length === 0) {
+                            searchResults += "<p>검색 결과가 없습니다.</p>";
+                        } else {
+                            data.forEach(function(item) {
+                                searchResults += "<p>항목일련번호: " + item.항목일련번호 + ", 이름: " + item.이름 + "</p>";
+                                searchResults += "<a href='/recipe/" + item.항목일련번호 + "'>레시피 보기</a><br>";
+                            });
+                        }
+                        document.getElementById('searchResults').innerHTML = searchResults;
+                        document.getElementById('searchPopup').style.right = '0';
+                    },
+                    error: function() {
+                        document.getElementById('searchResults').innerHTML = "<p>검색 중 오류가 발생했습니다.</p>";
+                    }
+                });
             }
 
-            // 검색 결과 팝업을 닫는 함수
             function closePopup(event) {
-                // 팝업 영역을 클릭한 경우에만 팝업을 닫습니다.
                 if (event.target.id === 'searchPopup') {
                     document.getElementById('searchPopup').style.right = '-300px';
                 }

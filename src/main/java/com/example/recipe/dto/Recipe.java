@@ -1,16 +1,12 @@
 package com.example.recipe.dto;
 
 import lombok.Data;
-import lombok.Getter;
-
-
+//조리법
 @Data
 public class Recipe {
-    // Getters and Setters
-    private int 항목일련번호; //
-    private String 카테고리; // 카테고리
-    private String 이름; // 이름
-    private String 메인이미지; // 메인이미지
 
+        private int 항목일련번호;
+        private int 조리순서;
+        private String 조리법;
 
 }

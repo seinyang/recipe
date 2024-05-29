@@ -11,126 +11,88 @@
 <div>
     <div class="r-card tac">
         <div class="r-nevi-icon">
-            <div>
-                <a href="" class="fs32 grey55"><</a>
-            </div>
-            <div class="fs36 lsm25 fw1 mt2 grey55">
-                07     <!-- 레시피 넘버 -->
-            </div>
-            <div>
-                <a href="" class="fs32 grey55">></i></a>
-            </div>
+            <div><a href="javascript:void(0);" class="fs32 grey55" onclick="navigateRecipe(-1);"><</a></div>
+            <div class="fs36 lsm25 fw1 mt2 grey55" th:text="${base.항목일련번호}"><!-- id=currentItemNumber--></div>
+            <div><a href="javascript:void(0);" class="fs32 grey55" onclick="navigateRecipe(1);">></a></div>
         </div>
 
+        <script>
+            // 현재 항목 일련번호를 URL에서 가져오는 함수
+            function getCurrentItemNumberFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return parseInt(urlParams.get('id'));
+            }
+
+            // 현재 항목 일련번호를 설정
+            var currentItemNumber = getCurrentItemNumberFromUrl();
+            document.getElementById('currentItemNumber').textContent = currentItemNumber;
+
+            // 이전 및 다음 항목으로 탐색하는 함수
+            function navigateRecipe(direction) {
+                const newItemNumber = currentItemNumber + direction;
+                console.log("Navigating to item number: ", newItemNumber);  // 디버깅을 위한 로그 추가
+
+                $.ajax({
+                    url: "/recipe/" + newItemNumber,
+                    type: "GET",
+                    success: function(data) {
+                        // 데이터를 받아와서 페이지를 업데이트 합니다.
+                        updateRecipeData(data);
+                        currentItemNumber = newItemNumber;
+                        document.getElementById('currentItemNumber').textContent = newItemNumber;
+                    },
+                    error: function() {
+                        alert("레시피를 불러오는 중 오류가 발생했습니다.");
+                    }
+                });
+            }
+
+            // 페이지를 업데이트하는 함수
+            function updateRecipeData(data) {
+                // 예: 레시피 이름, 재료 목록 등을 업데이트
+                // 이 부분은 데이터를 기반으로 동적으로 업데이트하도록 구현
+            }
+        </script>
         <div class="ulm"></div>
         <div>
-            <div class="fs24 lsm10 mt1 grey77">예뻐지는 미인차</div> <!-- 카테고리명 -->
-            <div class="fs48 lsm25 mtm05 mb1">오매, 산수유차</div> <!-- 레시피명 -->
+            <div class="fs24 lsm10 mt1 grey77" th:text="${base.카테고리}"></div> <!-- 카테고리명 -->
+            <div class="fs48 lsm25 mtm05 mb1" th:text="${base.이름}"></div> <!-- 레시피명 -->
         </div>
-        <div class="r-effect"> <!-- 효능 -->
-            <div class="r-effect-round r-c-bg1">
-                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;">다이어트</a>
-            </div>
-            <div class="r-effect-round r-c-bg1">
-                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;">디톡스</a>
-            </div>
-            <div class="r-effect-round r-c-bg1">
-                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;">피부미용</a>
+        <div class="r-effect">
+            <div th:each="effect : ${effect}" class="r-effect-round r-c-bg1">
+                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;" th:text="${effect.효과}"></a>
             </div>
         </div>
         <div class="containerb">
             <div class="layer_pop_txt" id="pop_txt1">
                 <div class="pop_content">
-                    <div class="title">
-                        <b>다이어트</b>와(과) 같은 효능을 지닌 차 목록
-                    </div>
+                    <div class="title"></div>
                     <ul class="popup-list grey55">
-                        <li>항목 1</li>
-                        <li>항목 2</li>
-                        <li>항목 3</li>
-                        <li>항목 4</li>
-                        <li>항목 5</li>
-                        <li>항목 6</li>
-                        <li>항목 7</li>
-                        <li>항목 8</li>
-                        <li>항목 9</li>
-                        <li>항목 10</li>
-                        <li>항목 11</li>
-                        <li>항목 12</li>
-                        <li>항목 13</li>
-                        <li>항목 14</li>
-                        <li>항목 15</li>
-                        <li>항목 16</li>
-                        <li>항목 17</li>
-                        <li>항목 18</li>
-                        <li>항목 19</li>
-                        <li>항목 20</li>
-                        <li>항목 21</li>
-                        <li>항목 22</li>
-                        <li>항목 23</li>
-                        <li>항목 24</li>
-                        <li>항목 25</li>
-                        <li>항목 26</li>
-                        <li>항목 27</li>
-                        <li>항목 28</li>
-                        <li>항목 29</li>
-                        <li>항목 30</li>
-                        <li>항목 31</li>
-                        <li>항목 32</li>
-                        <li>항목 33</li>
-                        <li>항목 34</li>
-                        <li>항목 35</li>
-                        <li>항목 36</li>
-                        <li>항목 37</li>
-                        <li>항목 38</li>
-                        <li>항목 39</li>
-                        <li>항목 40</li>
+                        <li th:each="effect : ${effect}" th:text="${effect.효과}">항목</li>
                     </ul>
-                    <div>
-                        <a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">닫기</a>
-                    </div>
-
+                    <div><a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">닫기</a></div>
                 </div>
             </div>
         </div>
         <div class="fw5 fs24 grey77 mt2"> 재료</div>
         <div class="ulm"></div>
-        <div class="r-icon lsm10 mt05">
+        <div th:each="ingredient: ${ingredient}" class="r-icon lsm10 mt05">
             <div class="r-icond">
-                <img src="/imgs/I_iwater.svg">
+                <img th:src="@{'/imgs/' + ${ingredient.목록아이콘}}">
             </div>
-            <div class="tal grey55"> <!-- 재료 중 물양 -->
-                물양 : 2리터
-            </div>
-        </div>
-        <div class="r-icon lsm10 mtm05">
-            <div class="r-icond">
-                <img src="/imgs/I_ome.svg">
-            </div>
-            <div class="tal grey55"> <!-- 재료 중 물양 -->
-                오매 : 150g
-            </div>
-        </div>
-        <div class="r-icon lsm10 mtm05">
-            <div class="r-icond">
-                <img src="/imgs/I_isansooyoo.svg">
-            </div>
-            <div class="tal grey55"> <!-- 재료 중 물양 -->
-                말린 산수유 : 75g
-            </div>
+            <div class="tal grey55" th:text="${ingredient.재료목록}"></div>
         </div>
 
         <div class="r-image">
-            <img src="/imgs/P_ome.png">
+            <img th:src="@{'/imgs/' + ${base.메인이미지}}">
         </div>
         <div class="fw5 fs24 grey77">만드는 순서</div>
         <div class="ulm"></div>
-        <div class="tal grey55 pl2 pr2">
-            01. 물 2L와 준비된 재료를 대형 바스켓에 넣어주세요.
-            <br>02. 우림모드로 가열해 주세요.
+        <div th:each="recipe : ${recipe}" class="tal grey55 pl2 pr2">
+            <span th:text="${recipe.조리순서}"></span> <span th:text="${recipe.조리법}"></span>
         </div>
         <div class="ulm"></div>
-        <a href="/templates/index.html" class="grey55">
+        <a href="/" class="grey55">
             <div class="r-main-btn mt2 mb2">
                 처음으로
             </div>
