@@ -38,11 +38,6 @@ public class Controller {
         return "popup";
     }
 
-    @GetMapping("/recipes")
-    @ResponseBody
-    public List<Base> getAllRecipes() {
-        return recipeService.getAllRecipes();
-    }
 
     @GetMapping("/recipe/{id}")
     public String getRecipe(@PathVariable("id")int id, Model model){

@@ -48,9 +48,10 @@
         <div id="mainImage" class="r-image">
             <img th:src="@{'/imgs/' + ${base.메인이미지}}">
         </div>
+
         <div class="fw5 fs24 grey77">만드는 순서</div>
         <div class="ulm"></div>
-        <div id="recipeSteps" th:each="recipe : ${recipe}" class="tal grey55 pl2 pr2">
+        <div id="recipeStepsContainer" th:each="recipe : ${recipe}" class="tal grey55 pl2 pr2">
             <span th:text="${recipe.조리순서}"></span> <span th:text="${recipe.조리법}"></span>
         </div>
         <div class="ulm"></div>
@@ -64,8 +65,9 @@
 </div>
 </body>
 <script>
+
     // 현재 항목 일련번호를 설정
-    var currentItemNumber = parseInt(document.getElementById('currentItemNumber').textContent);
+    let currentItemNumber = parseInt(document.getElementById('currentItemNumber').textContent);
 
     // 이전 및 다음 항목으로 탐색하는 함수
     function navigateRecipe(direction) {
@@ -80,6 +82,7 @@
                 updateRecipeData(data);
                 currentItemNumber = newItemNumber;
                 document.getElementById('currentItemNumber').textContent = newItemNumber;
+                history.pushState({}, null,"/api/recipe/" + newItemNumber);
             },
             error: function() {
                 alert("레시피를 불러오는 중 오류가 발생했습니다.");
@@ -154,22 +157,22 @@
         if (mainImageElement) {
             mainImageElement.src = '/imgs/' + data.base.메인이미지;
         }
-
-        // 만드는 순서 업데이트
-        const recipeStepsContainer = document.getElementById('recipeSteps');
+        const recipeStepsContainer = document.getElementById('recipeStepsContainer');
         if (recipeStepsContainer) {
             recipeStepsContainer.innerHTML = '';
+            console.log("Cleared recipeStepsContainer", recipeStepsContainer.innerHTML);
             data.recipes.forEach(recipe => {
                 const stepDiv = document.createElement('div');
                 stepDiv.classList.add('tal', 'grey55', 'pl2', 'pr2');
                 const stepOrderSpan = document.createElement('span');
-                stepOrderSpan.textContent = recipe.order;
+                stepOrderSpan.textContent = recipe.조리순서;
                 const stepDescriptionSpan = document.createElement('span');
-                stepDescriptionSpan.textContent = recipe.description;
+                stepDescriptionSpan.textContent = recipe.조리법;
                 stepDiv.appendChild(stepOrderSpan);
                 stepDiv.appendChild(stepDescriptionSpan);
                 recipeStepsContainer.appendChild(stepDiv);
             });
+            console.log("Updated recipeStepsContainer with new data", recipeStepsContainer.innerHTML);
         }
     }
 
@@ -195,6 +198,7 @@
     function closePopup(obj) {
         $(obj).hide();
     }
+
 
 </script>
 </html>
