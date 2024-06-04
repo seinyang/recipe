@@ -23,5 +23,7 @@
         WHERE (#{항목일련번호} IS NULL OR 항목일련번호 = #{항목일련번호})
           AND (#{이름} IS NULL OR 이름 = #{이름});
     </select>
-
+    <select id="findRecipes" parameterType="int"  resultType="com.example.recipe.dto.Recipe">
+        SELECT * FROM 베이스 where 카테고리 = #{항목일련번호} ORDER BY 조리순서;
+    </select>
 </mapper>
