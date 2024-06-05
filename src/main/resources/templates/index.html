@@ -89,55 +89,55 @@
             Category
         </div>
         <div class="r-category-area mb2">
-            <a href="" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="미인차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg1o">
                     <img src="/imgs/P_category_1.jpg" style="width:100%; ">
                     미인차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="회춘차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg2o">
                     <img src="/imgs/P_category_2.jpg" style="width:100%; ">
                     회춘차
                 </div>
             </a>
-            <a href="/page.html" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="원기회복차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg3o">
                     <img src="/imgs/P_category_3.jpg" style="width:100%; ">
                     원기회복차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="면역차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg4o">
                     <img src="/imgs/P_category_4.jpg" style="width:100%; ">
                     면역차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="항염차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg5o">
                     <img src="/imgs/P_category_5.jpg" style="width:100%; ">
                     항염차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;">
+            <a href="" style="text-decoration-line: none;" class="category-link" data-category="위장차">
                 <div class="r-category-card r-c-bg6o">
                     <img src="/imgs/P_category_6.jpg" style="width:100%; ">
                     위장차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;">
+            <a href="" style="text-decoration-line: none;" class="category-link" data-category="안정차">
                 <div class="r-category-card r-c-bg7o">
                     <img src="/imgs/P_category_7.jpg" style="width:100%; ">
                     안정차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;">
-                <div class="r-category-card r-c-bg8o">
+            <a href="" style="text-decoration-line: none;" class="category-link" data-category="환절기차">
+                <div class="r-category-card r-c-bg8o" >
                     <img src="/imgs/P_category_8.jpg" style="width:100%; ">
                     환절기차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;">
+            <a href="" style="text-decoration-line: none;" class="category-link" data-category="눈맑차">
                 <div class="r-category-card r-c-bg9o">
                     <img src="/imgs/P_category_9.jpg" style="width:100%; ">
                     눈맑차
@@ -200,5 +200,34 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('.category-link').on('click', function(e) {
+            e.preventDefault();
+            const category = $(this).data('category');
+            $.ajax({
+                url: '/category/'+category,
+                type: 'GET',
+                data: { category: category },
+                success: function(data) {
+                    let popupContent = "";
+                    if (data.length > 0) {
+                        data.forEach(function(item) {
+                            popupContent += '<p>' + item.name + '</p>'; // 레시피 내용을 적절히 표시
+                        });
+                    } else {
+                        popupContent += '<p>해당 카테고리에 대한 레시피가 없습니다.</p>';
+                    }
+                    localStorage.setItem('popupContent', popupContent);
+                    window.open('/popup.html', 'popup', 'width=600,height=400');
+                },
+                error: function() {
+                    alert('데이터를 가져오는 중 오류가 발생했습니다.');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

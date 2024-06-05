@@ -40,6 +40,10 @@ public class RecipeService {
         return recipeMapper.findRecipes(항목일련번호);
     }
 
+    public List<Base> getCategory(String 카테고리){
+        return recipeMapper.findCategory(카테고리);
+    }
+
     public List<Base> searchBaseByNumberAndName(Integer 항목일련번호, String 이름) {
         return recipeMapper.findByNumberAndName(항목일련번호, 이름);
     }

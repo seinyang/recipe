@@ -71,6 +71,7 @@ public class Controller {
 
             return new RecipeData(base, ingredients, effects, recipes);
         }
+
     }
 
     public static class RecipeData {
@@ -93,6 +94,8 @@ public class Controller {
         public List<Recipe> getRecipes() { return recipes; }
     }
 
+
+
         @GetMapping("/search")
         public ResponseEntity<List<Base>> searchBase(@RequestParam(required = false) Integer 항목일련번호, @RequestParam(required = false) String 이름) {
 
@@ -104,4 +107,11 @@ public class Controller {
             }
             return ResponseEntity.ok(searchResult);
         }
+
+    @GetMapping("/category/{category}")
+
+    public List<Base> getCategory(@PathVariable String category) {
+        return recipeService.getCategory(category);
+    }
+
 }
