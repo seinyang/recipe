@@ -200,31 +200,29 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
         $('.category-link').on('click', function(e) {
             e.preventDefault();
             const category = $(this).data('category');
+            const encodedCategory = encodeURIComponent(category);
+
             $.ajax({
-                url: '/category/'+category,
+                url: '/category',
                 type: 'GET',
-                data: { category: category },
+                data: { 카테고리: encodedCategory },
                 success: function(data) {
                     let popupContent = "";
-                    if (data.length > 0) {
+                    if (Array.isArray(data)) { // 데이터가 배열인지 확인
                         data.forEach(function(item) {
-                            popupContent += '<p>' + item.name + '</p>'; // 레시피 내용을 적절히 표시
+                            popupContent += '<p>' + item.name + '</p>'; // 배열일 경우 처리
                         });
-                    } else {
-                        popupContent += '<p>해당 카테고리에 대한 레시피가 없습니다.</p>';
+                    } else { // 배열이 아닌 경우 처리
+                        popupContent += '<p>' + data.name + '</p>'; // 예시로 데이터 객체의 name 속성을 사용
                     }
-                    localStorage.setItem('popupContent', popupContent);
-                    window.open('/popup.html', 'popup', 'width=600,height=400');
+                    // 현재 창의 위치를 변경하여 popup.html로 이동
+                    window.location.href = `/popup?category=${encodedCategory}`;
                 },
-                error: function() {
-                    alert('데이터를 가져오는 중 오류가 발생했습니다.');
-                }
             });
         });
     });

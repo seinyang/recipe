@@ -108,10 +108,11 @@ public class Controller {
             return ResponseEntity.ok(searchResult);
         }
 
-    @GetMapping("/category/{category}")
-
-    public List<Base> getCategory(@PathVariable String category) {
-        return recipeService.getCategory(category);
+    @GetMapping("/category")
+    public String getCategory(@RequestParam String 카테고리, Model model) {
+        List<Base> categoryData = recipeService.getCategory(카테고리);
+        model.addAttribute("categoryData", categoryData);
+        return "popup";
     }
 
 }

@@ -11,8 +11,10 @@
 </head>
 <body>
   <div class="container">
-    <p class="pop_button"><a href="#;" onclick="openPopup('#pop_txt1')">팝업창 1</a></p>
-    <p class="pop_button"><a href="#;" onclick="openPopup('#pop_txt2')">팝업창 2</a></p>
+
+    <div id="category-data"></div>
+    <p class="pop_button"><a href="#" onclick="openPopup('#pop_txt1')">팝업창 1</a></p>
+    <p class="pop_button"><a href="#" onclick="openPopup('#pop_txt2')">팝업창 2</a></p>
 
     <div class="layer_pop_txt" id="pop_txt1">
       <div class="pop_content">
@@ -28,8 +30,38 @@
       </div>
     </div>
   </div>
-</body>
 
+</body>
+<script>
+  $(document).ready(function() {
+    // URL에서 카테고리 데이터를 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+
+    // AJAX 요청을 통해 서버에서 데이터를 가져옴
+    $.ajax({
+      url: '/category',
+      type: 'GET',
+      data: { 카테고리: category },
+      success: function(data) {
+        let content = "";
+        if (Array.isArray(data)) {
+          data.forEach(function(item, index) {
+            console.log("항목일련번호:", index + 1, "항목이름:", item.이름);
+            content += `<p>${index + 1}, ${item.이름}</p>`;
+
+          });
+        } else {
+          content = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";
+        }
+        $('#category-data').html(content);
+      },
+      error: function() {
+        $('#category-data').html("<p>데이터를 불러오는 중 오류가 발생했습니다.</p>");
+      }
+    });
+  });
+</script>
 <script>
 
    //팝업창 열기
