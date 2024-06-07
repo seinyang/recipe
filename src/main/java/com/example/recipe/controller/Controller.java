@@ -94,8 +94,6 @@ public class Controller {
         public List<Recipe> getRecipes() { return recipes; }
     }
 
-
-
         @GetMapping("/search")
         public ResponseEntity<List<Base>> searchBase(@RequestParam(required = false) Integer 항목일련번호, @RequestParam(required = false) String 이름) {
 
@@ -109,10 +107,9 @@ public class Controller {
         }
 
     @GetMapping("/category")
-    public String getCategory(@RequestParam String 카테고리, Model model) {
-        List<Base> categoryData = recipeService.getCategory(카테고리);
-        model.addAttribute("categoryData", categoryData);
-        return "popup";
+    @ResponseBody
+    public List<Base> getCategory(@RequestParam String 카테고리) {
+        return recipeService.getCategory(카테고리);
     }
 
 }

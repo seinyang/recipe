@@ -11,26 +11,25 @@
 </head>
 <body>
   <div class="container">
+    <div id="category-data">
+      <p class="pop_button"><a href="#" onclick="openPopup('#pop_txt1')">팝업창 1</a></p>
+      <p class="pop_button"><a href="#" onclick="openPopup('#pop_txt2')">팝업창 2</a></p>
 
-    <div id="category-data"></div>
-    <p class="pop_button"><a href="#" onclick="openPopup('#pop_txt1')">팝업창 1</a></p>
-    <p class="pop_button"><a href="#" onclick="openPopup('#pop_txt2')">팝업창 2</a></p>
-
-    <div class="layer_pop_txt" id="pop_txt1">
-      <div class="pop_content">
-        <p>팝업창1<br>팝업창1<br>팝업창1<br>팝업창1<br>팝업창1<br></p>
-        <a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">X</a>
+      <div class="layer_pop_txt" id="pop_txt1">
+        <div class="pop_content">
+          <p>팝업창1<br>팝업창1<br>팝업창1<br>팝업창1<br>팝업창1<br></p>
+          <a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">X</a>
+        </div>
       </div>
-    </div>
 
-    <div class="layer_pop_txt" id="pop_txt2">
-      <div class="pop_content">
-        <p>팝업창2<br>팝업창2<br>팝업창2<br>팝업창2<br>팝업창2<br></p>
-        <a class="close_btn" href="#;" onclick="closePopup('#pop_txt2')">X</a>
+      <div class="layer_pop_txt" id="pop_txt2">
+        <div class="pop_content">
+          <p>팝업창2<br>팝업창2<br>팝업창2<br>팝업창2<br>팝업창2<br></p>
+          <a class="close_btn" href="#;" onclick="closePopup('#pop_txt2')">X</a>
+        </div>
       </div>
     </div>
   </div>
-
 </body>
 <script>
   $(document).ready(function() {
@@ -48,8 +47,11 @@
         if (Array.isArray(data)) {
           data.forEach(function(item, index) {
             console.log("항목일련번호:", index + 1, "항목이름:", item.이름);
-            content += `<p>${index + 1}, ${item.이름}</p>`;
-
+            content += `
+                <p class="pop_button">
+                  <a href="#" onclick="openPopup('#pop_txt1', '${item.이름}')"> ${item.이름}</a>
+                </p>
+              `;
           });
         } else {
           content = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";

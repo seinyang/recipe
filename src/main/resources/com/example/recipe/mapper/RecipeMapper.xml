@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.recipe.mapper.RecipeMapper">
     <select id="findAll" resultType="com.example.recipe.dto.Base">
-        SELECT * FROM 베이스;
+        SELECT 항목일련번호，카테고리，이름，메인이미지 FROM 베이스;
     </select>
     <select id="findBase" parameterType="int"  resultType="com.example.recipe.dto.Base">
-        SELECT * FROM 베이스 where 항목일련번호 = #{항목일련번호};
+        SELECT 항목일련번호，카테고리，이름，메인이미지 FROM 베이스 where 항목일련번호 = #{항목일련번호};
     </select>
     <select id="findEffects" parameterType="int"  resultType="com.example.recipe.dto.Effect">
         SELECT * FROM 효과 where 항목일련번호 = #{항목일련번호};
@@ -20,12 +20,11 @@
     </select>
     <select id="findByNumberAndName" parameterType="map" resultType="com.example.recipe.dto.Base">
         SELECT * FROM 베이스
-        WHERE (#{항목일련번호} IS NULL OR 항목일련번호 = #{항목일련번호})
-          AND (#{이름} IS NULL OR 이름 = #{이름});
+        WHERE 이름 Like CONCAT( #{이름}, '%');
     </select>
     <select id="findCategory" resultType="com.example.recipe.dto.Base">
         SELECT 항목일련번호, 이름
         FROM 베이스
-        WHERE SUBSTRING(카테고리, CHARINDEX(' ', 카테고리) + 1, LEN(카테고리)) = #{카테고리}
+        WHERE 카테고리 LIKE CONCAT('%', #{카테고리}, '%')
     </select>
 </mapper>
