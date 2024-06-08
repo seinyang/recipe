@@ -34,8 +34,8 @@
 
         <div class="search-container">
             <!-- 검색창 -->
-            <form id="searchForm" onsubmit="executeSearch(); return false;" class="formform">
-                <input type="text" id="searchInput" placeholder="레시피를 검색 해보세요" class="searchst">
+            <form id="searchForm" onsubmit="executeSearch(); return false;" class="formform" >
+                <input type="text" id="searchInput" placeholder="레시피를 검색 해보세요" class="searchst" oninput="removeSpecialCharacters()">
                 <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
             </form>
         </div>
@@ -48,9 +48,16 @@
         </div>
 
         <script>
+            function removeSpecialCharacters() {
+                const searchInput = document.getElementById('searchInput');
+                searchInput.value = searchInput.value.replace(/[^\u3131-\u314e|\u314f-\u3163|\uac00-\ud7a3]/gi, '');
+
+            }
             function executeSearch() {
-                var searchInput = document.getElementById('searchInput').value;
-                var searchParam = isNaN(searchInput) ? { 이름: searchInput } : { 항목일련번호: searchInput };
+
+                let searchInput = document.getElementById('searchInput').value;
+                searchInput = searchInput.replace(/[^a-zA-Z0-9가-힣\s]/g, '');
+                const searchParam = isNaN(searchInput) ? { 이름: searchInput } : { 항목일련번호: searchInput };
 
                 $.ajax({
                     url: "/search",
@@ -62,7 +69,7 @@
                             searchResults += "<p>검색 결과가 없습니다.</p>";
                         } else {
                             data.forEach(function(item) {
-                                searchResults += "<p>항목일련번호: " + item.항목일련번호 + ", 이름: " + item.이름 + "</p>";
+                                searchResults += "<p> 이름: " + item.이름 + "</p>";
                                 searchResults += "<a href='/recipe/" + item.항목일련번호 + "'>레시피 보기</a><br>";
                             });
                         }

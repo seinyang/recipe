@@ -99,17 +99,17 @@ public class Controller {
 
             List<Base> searchResult;
             if (항목일련번호 != null || 이름 != null) {
-                searchResult = recipeService.searchBaseByNumberAndName(항목일련번호, 이름);
+                searchResult = recipeService.findSearchName(항목일련번호,이름);
             } else {
                 return ResponseEntity.badRequest().build();
             }
             return ResponseEntity.ok(searchResult);
         }
 
-    @GetMapping("/category")
-    @ResponseBody
-    public List<Base> getCategory(@RequestParam String 카테고리) {
-        return recipeService.getCategory(카테고리);
-    }
+        @GetMapping("/category")
+        @ResponseBody
+        public List<Base> getCategory(@RequestParam String 카테고리) {
+            return recipeService.getCategory(카테고리);
+        }
 
 }
