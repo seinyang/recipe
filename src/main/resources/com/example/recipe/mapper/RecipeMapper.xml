@@ -16,12 +16,12 @@
         SELECT 항목일련번호,조리순서,조리법 FROM 조리법 where 항목일련번호 = #{항목일련번호} ORDER BY 조리순서;
     </select>
     <select id="findSearchName" parameterType="map" resultType="com.example.recipe.dto.Base">
-        SELECT * FROM 베이스
-        WHERE 이름 Like CONCAT('%', #{이름}, '%');
+        SELECT 항목일련번호,이름 FROM 베이스
+        WHERE 이름 Like '%' + #{이름} + '%';
     </select>
     <select id="findCategory" resultType="com.example.recipe.dto.Base">
         SELECT 항목일련번호, 이름
         FROM 베이스
-        WHERE 카테고리 LIKE CONCAT('%', #{카테고리}, '%')
+        WHERE 카테고리 LIKE '%' + #{카테고리} + '%';
     </select>
 </mapper>
