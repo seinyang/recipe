@@ -82,7 +82,7 @@
                 updateRecipeData(data);
                 currentItemNumber = newItemNumber;
                 document.getElementById('currentItemNumber').textContent = newItemNumber;
-                history.pushState({}, null,"/api/recipe/" + newItemNumber);
+                history.pushState({}, null,"/recipe/" + newItemNumber);
             },
             error: function() {
                 alert("레시피를 불러오는 중 오류가 발생했습니다.");

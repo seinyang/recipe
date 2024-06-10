@@ -7,7 +7,7 @@
   <title>팝업창</title>
 
   <link rel="stylesheet" type="text/css" href="/popup.css">
-  <script src="https://code.jquery.com/jquery-3.6.3.js"></script> 
+  <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 </head>
 <body>
   <div class="container">
@@ -45,13 +45,12 @@
       success: function(data) {
         let content = "";
         if (Array.isArray(data)) {
-          data.forEach(function(item, index) {
-            console.log("항목일련번호:", index + 1, "항목이름:", item.이름);
+          data.forEach(function(item) {
             content += `
-                <p class="pop_button">
-                  <a href="#" onclick="openPopup('#pop_txt1', '${item.이름}')"> ${item.이름}</a>
-                </p>
-              `;
+              <p class="pop_button">
+                <a href="#" onclick="openPopup('#${item.팝업창id}', '${item.이름}')">${item.이름}</a>
+              </p>
+            `;
           });
         } else {
           content = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";
@@ -63,19 +62,17 @@
       }
     });
   });
-</script>
-<script>
 
-   //팝업창 열기
-   function openPopup(obj){
-        $(".layer_pop_txt").hide();
-        $(obj).show();
-    }
+  function openPopup(popId, categoryName) {
+    // 팝업 창에 카테고리 내용 표시
+    $(popId).find('.pop_content').find('p').html(categoryName);
+    // 해당 팝업 창 열기
+    $(popId).show();
+  }
 
-    //팝업창 닫기
-    function closePopup(obj){
-         $(obj).hide();
-    }
- 
+  function closePopup(popId) {
+    // 해당 팝업 창 닫기
+    $(popId).hide();
+  }
 </script>
 </html>

@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
+
     <link href="/m-css-st.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/popup.css">
     <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <title>레시피 </title>
 </head>
 
 <body>
@@ -64,6 +68,7 @@
                     type: "GET",
                     data: searchParam,
                     success: function(data) {
+
                         var searchResults = "<h3>검색 결과</h3>";
                         if (data.length === 0) {
                             searchResults += "<p>검색 결과가 없습니다.</p>";
@@ -96,7 +101,7 @@
             Category
         </div>
         <div class="r-category-area mb2">
-            <a href="" class="category-link" data-category="미인차" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-popup="#pop_txt1" data-category="미인차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg1o">
                     <img src="/imgs/P_category_1.jpg" style="width:100%; ">
                     미인차
@@ -207,30 +212,85 @@
         </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="layer_pop_txt" id="pop_txt1">
+        <div class="pop_content">
+            <div id="category-data1">
+                <!-- 데이터가 여기에 표시될 것입니다. -->
+            </div>
+            <a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">X</a>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function() {
-        $('.category-link').on('click', function(e) {
-            e.preventDefault();
-            const category = $(this).data('category');
-            const encodedCategory = encodeURIComponent(category);
+        function openPopup(popId) {
+            $('.layer_pop_txt').hide(); // 모든 팝업을 숨깁니다.
+            $(popId).show(); // 해당 팝업을 보여줍니다.
+        }
+
+        function closePopup(popId) {
+            $(popId).hide(); // 해당 팝업을 닫습니다.
+            history.pushState({}, '', window.location.pathname); // URL을 기본으로 되돌립니다.
+        }
+
+        function loadCategoryData(카테고리) {
+            const encodedCategory = encodeURIComponent(카테고리);
+            console.log('클릭한 카테고리:', encodedCategory); // 클릭한 카테고리 콘솔 출력
 
             $.ajax({
-                url: '/category',
+                url: '/category', // 실제 데이터 요청 URL로 변경해야 합니다.
                 type: 'GET',
-                data: { 카테고리: encodedCategory },
+                data: { category: 카테고리 }, // 'category'로 파라미터 설정
                 success: function(data) {
                     let popupContent = "";
-                    if (Array.isArray(data)) { // 데이터가 배열인지 확인
+                    if (Array.isArray(data) && data.length > 0) { // 배열이고 데이터가 존재하는지 확인
+                        console.log('데이터:', data); // 받아온 데이터 콘솔 출력
+                        // 받아온 데이터를 화면에 표시
                         data.forEach(function(item) {
-                            popupContent += '<p>' + item.name + '</p>'; // 배열일 경우 처리
+                            popupContent += `  <p class="pop_button"><a href="/recipe/${item.항목일련번호}" target="_blank" >${item.이름}</a></p>`;
                         });
-                    } else { // 배열이 아닌 경우 처리
-                        popupContent += '<p>' + data.name + '</p>'; // 예시로 데이터 객체의 name 속성을 사용
+                    } else {
+                        popupContent = "<p>해당 카테고리에 대한 데이터가 존재하지 않습니다.</p>";
                     }
-                    // 현재 창의 위치를 변경하여 popup.html로 이동
-                    window.location.href = `/popup?category=${encodedCategory}`;
+                    $('#category-data1').html(popupContent); // 팝업 창에 데이터 삽입
+                    openPopup('#pop_txt1'); // 해당 카테고리의 팝업 열기
                 },
+                error: function() {
+                    console.error('데이터를 불러오는 중 오류가 발생했습니다.');
+                    $('#category-data1').html("<p>데이터를 불러오는 중 오류가 발생했습니다.</p>");
+
+                }
             });
+        }
+
+        // 카테고리 링크 클릭 시 팝업 열기
+        $('.category-link').on('click', function(e) {
+            e.preventDefault();
+            const 카테고리 = $(this).data('category');
+            const decodedCategory = decodeURIComponent(카테고리); // 클릭한 카테고리를 디코딩
+            const url = new URL(window.location.href); // 수정: 현재 URL을 가져오도록 변경
+            url.searchParams.set('category', decodedCategory); // 디코딩된 카테고리를 URL에 설정
+            window.history.pushState({}, '', url);
+            loadCategoryData(decodedCategory); // 디코딩된 카테고리를 사용하여 데이터 로드
+        });
+
+        // 팝업 닫기 버튼 클릭 시 팝업 닫기
+        $('.close_btn').on('click', function(e) {
+            e.preventDefault();
+            const popId = $(this).attr('onclick').match(/'(.*?)'/)[1];
+            closePopup(popId);
+        });
+
+
+
+        window.addEventListener('popstate', function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('카테고리')) {
+                const 카테고리 = params.get('카테고리');
+                loadCategoryData(카테고리);
+            }
         });
     });
 </script>

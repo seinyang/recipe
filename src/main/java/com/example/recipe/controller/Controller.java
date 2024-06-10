@@ -108,7 +108,7 @@ public class Controller {
 
         @GetMapping("/category")
         @ResponseBody
-        public List<Base> getCategory(@RequestParam String 카테고리) {
+        public List<Base> getCategory(@RequestParam("category") String 카테고리) {
             return recipeService.getCategory(카테고리);
         }
 
