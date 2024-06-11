@@ -11,10 +11,18 @@
 <div>
     <div class="r-card tac">
         <div class="r-nevi-icon">
-            <div><a th:href="@{'/recipe/' + ${base.항목일련번호 - 1}}" class="fs32 grey55"><</a></div>
+            <div th:if="${base.항목일련번호 > 1}" style="visibility: visible;">
+                <a th:href="@{'/recipe/' + ${base.항목일련번호 - 1}}" class="fs32 grey55"><</a>
+            </div>
+            <div th:if="${base.항목일련번호 == 1}" style="visibility: hidden;">
+                <a class="fs32 grey55"><</a>
+            </div>
             <div id="currentItemNumber" class="fs36 lsm25 fw1 mt2 grey55" th:text="${base.항목일련번호}"></div>
-            <div><a th:href="@{'/recipe/' + ${base.항목일련번호 + 1}}" class="fs32 grey55">></a></div>
+            <div>
+                <a th:href="@{'/recipe/' + ${base.항목일련번호 + 1}}" class="fs32 grey55">></a>
+            </div>
         </div>
+
         <div class="ulm"></div>
         <div>
             <div id="category" class="fs24 lsm10 mt1 grey77" th:text="${base.카테고리}"></div> <!-- 카테고리명 -->
