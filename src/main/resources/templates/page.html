@@ -30,7 +30,7 @@
         </div>
         <div id="effects" class="r-effect">
             <div th:each="effect : ${effect}" class="r-effect-round r-c-bg1">
-                <a href="#;" onclick="openPopup('#pop_txt1')" style="color:white;" th:text="${effect.효과}"></a>
+                <a href="#;" class="effect-link" th:data-effect="${effect.효과}" style="color:white;" th:text="${effect.효과}"></a>
             </div>
         </div>
         <div class="containerb">
@@ -38,9 +38,9 @@
                 <div class="pop_content">
                     <div class="title"></div>
                     <ul id="effectsList" class="popup-list grey55">
-                        <li th:each="effect : ${effect}" th:text="${effect.효과}">항목</li>
+
                     </ul>
-                    <div><a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">닫기</a></div>
+                    <div><a class="close_btn" href="javascript:void(0);" onclick="closePopup('#pop_txt1')">닫기</a></div>
                 </div>
             </div>
         </div>
@@ -68,8 +68,68 @@
                 처음으로
             </div>
         </a>
-
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        function loadEffectData(효과) {
+            const encodedSearchQuery = encodeURIComponent(효과);
+            console.log('클릭한 효과:', encodedSearchQuery);
+
+            $.ajax({
+                url: '/effect',
+                type: 'GET',
+                data: { searchEffect: 효과 },
+                success: function(data) {
+                    let popupContent = "";
+                    if (Array.isArray(data) && data.length > 0) {
+                        console.log('데이터:', data);
+                        data.forEach(function(item) {
+                            popupContent += `<p class="pop_button"><a href="/recipe/${item.항목일련번호}" target="_blank">${item.이름}</a></p>`;
+                        });
+                    } else {
+                        popupContent = "<p>해당 효과에 대한 데이터가 존재하지 않습니다.</p>";
+                    }
+                    $('#effectsList').html(popupContent);
+                    openPopup('#pop_txt1');
+                },
+                error: function() {
+                    console.error('데이터를 불러오는 중 오류가 발생했습니다.');
+                    $('#effectsList').html("<p>데이터를 불러오는 중 오류가 발생했습니다.</p>");
+                }
+            });
+        }
+
+        $('.effect-link').on('click', function(e) {
+            e.preventDefault();
+            const 효과 = $(this).data('effect');
+            const decodedSearchQuery = decodeURIComponent(효과);
+            const url = new URL(window.location.href);
+            url.searchParams.set('searchEffect', decodedSearchQuery);
+            window.history.pushState({}, '', url);
+            loadEffectData(decodedSearchQuery);
+        });
+
+        window.addEventListener('popstate', function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('searchEffect')) {
+                const 효과 = params.get('searchEffect');
+                loadEffectData(효과);
+            }
+        });
+    });
+
+    function openPopup(obj) {
+        $(".layer_pop_txt").hide();
+        $(obj).show();
+    }
+
+    function closePopup(obj) {
+        $(obj).hide();
+        const url = new URL(window.location.href);
+        url.searchParams.delete('searchEffect'); // URL에서 searchEffect 파라미터를 제거
+        window.history.pushState({}, '', url);
+    }
+</script>
 </body>
 </html>

@@ -22,6 +22,14 @@
     <select id="findCategory" resultType="com.example.recipe.dto.Base">
         SELECT 항목일련번호, 이름
         FROM 베이스
-        WHERE 카테고리 LIKE '%' + #{카테고리} + '%';
+        WHERE 카테고리 Like '%' + #{검색어} + '%';
+    </select>
+
+    <select id="findEffect" parameterType="string" resultType="com.example.recipe.dto.Base">
+        SELECT 베이스.이름, 베이스.항목일련번호
+        FROM 효과
+        INNER JOIN 베이스 ON 효과.항목일련번호 = 베이스.항목일련번호
+        WHERE 효과.효과 = #{효과}
+        ORDER BY 베이스.이름
     </select>
 </mapper>

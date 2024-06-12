@@ -13,5 +13,6 @@ public class Base {
     private String 카테고리; // 카테고리
     private String 이름; // 이름
     private String 메인이미지; // 메인이미지
+    private String 검색어;
 
 }

@@ -69,8 +69,14 @@ public class Controller {
 
         @GetMapping("/category")
         @ResponseBody
-        public List<Base> getCategory(@RequestParam("category") String 카테고리) {
-            return recipeService.getCategory(카테고리);
+        public List<Base> getCategory(@RequestParam("searchQuery") String 검색어) {
+            return recipeService.getCategory(검색어);
         }
 
+
+        @GetMapping("/effect")
+        @ResponseBody
+        public List<Effect> getEffect(@RequestParam("searchEffect") String 효과) {
+            return recipeService.findEffect(효과);
+        }
 }

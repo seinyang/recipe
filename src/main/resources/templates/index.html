@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
-
     <link href="/m-css-st.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="/popup.css">
     <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
     <title>레시피 </title>
 </head>
 
 <body>
+
 <div>
     <div class="r-card">
         <div class="r-top">
@@ -113,19 +111,19 @@
                     회춘차
                 </div>
             </a>
-            <a href="" class="category-link" data-category="원기회복차" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="원기회복" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg3o">
                     <img src="/imgs/P_category_3.jpg" style="width:100%; ">
                     원기회복차
                 </div>
             </a>
-            <a href="" class="category-link" data-category="면역차" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="방패차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg4o">
                     <img src="/imgs/P_category_4.jpg" style="width:100%; ">
                     면역차
                 </div>
             </a>
-            <a href="" class="category-link" data-category="항염차" style="text-decoration-line: none;">
+            <a href="" class="category-link" data-category="소염차" style="text-decoration-line: none;">
                 <div class="r-category-card r-c-bg5o">
                     <img src="/imgs/P_category_5.jpg" style="width:100%; ">
                     항염차
@@ -173,7 +171,7 @@
                     항암차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;" class="category-link" data-category="혈당차">
+            <a href="" style="text-decoration-line: none;" class="category-link" data-category="당뇨차">
                 <div class="r-category-card r-c-bg13o">
                     <img src="/imgs/P_category_13.jpg" style="width:100%; ">
                     혈당차
@@ -197,7 +195,7 @@
                     갑상선차
                 </div>
             </a>
-            <a href="" style="text-decoration-line: none;" class="category-link" data-category="관절염차">
+            <a href="" style="text-decoration-line: none;" class="category-link" data-category="통뼈차">
                 <div class="r-category-card r-c-bg17o">
                     <img src="/imgs/P_category_17.jpg" style="width:100%; ">
                     관절염차
@@ -212,37 +210,28 @@
         </div>
     </div>
 </div>
-
-<div class="container">
+<div class="containerb">
     <div class="layer_pop_txt" id="pop_txt1">
         <div class="pop_content">
-            <div id="category-data1">
-                <!-- 데이터가 여기에 표시될 것입니다. -->
+            <ul class="popup-list grey55" id="popup-list">
+            </ul>
+            <div>
+                <a class="close_btn" href="javascript:void(0);" onclick="closePopup('#pop_txt1')">닫기</a>
             </div>
-            <a class="close_btn" href="#;" onclick="closePopup('#pop_txt1')">X</a>
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
-        function openPopup(popId) {
-            $('.layer_pop_txt').hide(); // 모든 팝업을 숨깁니다.
-            $(popId).show(); // 해당 팝업을 보여줍니다.
-        }
-
-        function closePopup(popId) {
-            $(popId).hide(); // 해당 팝업을 닫습니다.
-            history.pushState({}, '', window.location.pathname); // URL을 기본으로 되돌립니다.
-        }
-
-        function loadCategoryData(카테고리) {
-            const encodedCategory = encodeURIComponent(카테고리);
-            console.log('클릭한 카테고리:', encodedCategory); // 클릭한 카테고리 콘솔 출력
+        function loadCategoryData(검색어) {
+            const encodedSearchQuery = encodeURIComponent(검색어);
+            console.log('클릭한 카테고리:', encodedSearchQuery); // 클릭한 카테고리 콘솔 출력
 
             $.ajax({
                 url: '/category', // 실제 데이터 요청 URL로 변경해야 합니다.
                 type: 'GET',
-                data: { category: 카테고리 }, // 'category'로 파라미터 설정
+                data: { searchQuery: 검색어 }, // 'searchQuery'로 파라미터 설정
                 success: function(data) {
                     let popupContent = "";
                     if (Array.isArray(data) && data.length > 0) { // 배열이고 데이터가 존재하는지 확인
@@ -254,12 +243,12 @@
                     } else {
                         popupContent = "<p>해당 카테고리에 대한 데이터가 존재하지 않습니다.</p>";
                     }
-                    $('#category-data1').html(popupContent); // 팝업 창에 데이터 삽입
+                    $('#popup-list').html(popupContent); // 팝업 창에 데이터 삽입
                     openPopup('#pop_txt1'); // 해당 카테고리의 팝업 열기
                 },
                 error: function() {
                     console.error('데이터를 불러오는 중 오류가 발생했습니다.');
-                    $('#category-data1').html("<p>데이터를 불러오는 중 오류가 발생했습니다.</p>");
+                    $('#popup-list').html("<p>데이터를 불러오는 중 오류가 발생했습니다.</p>");
 
                 }
             });
@@ -268,31 +257,39 @@
         // 카테고리 링크 클릭 시 팝업 열기
         $('.category-link').on('click', function(e) {
             e.preventDefault();
-            const 카테고리 = $(this).data('category');
-            const decodedCategory = decodeURIComponent(카테고리); // 클릭한 카테고리를 디코딩
+            const 검색어 = $(this).data('category');
+            const decodedSearchQuery = decodeURIComponent(검색어); // 클릭한 카테고리를 디코딩
             const url = new URL(window.location.href); // 수정: 현재 URL을 가져오도록 변경
-            url.searchParams.set('category', decodedCategory); // 디코딩된 카테고리를 URL에 설정
+            url.searchParams.set('searchQuery', decodedSearchQuery); // 디코딩된 카테고리를 URL에 설정
             window.history.pushState({}, '', url);
-            loadCategoryData(decodedCategory); // 디코딩된 카테고리를 사용하여 데이터 로드
+            loadCategoryData(decodedSearchQuery); // 디코딩된 카테고리를 사용하여 데이터 로드
         });
-
-        // 팝업 닫기 버튼 클릭 시 팝업 닫기
-        $('.close_btn').on('click', function(e) {
-            e.preventDefault();
-            const popId = $(this).attr('onclick').match(/'(.*?)'/)[1];
-            closePopup(popId);
-        });
-
 
 
         window.addEventListener('popstate', function() {
             const params = new URLSearchParams(window.location.search);
-            if (params.has('카테고리')) {
-                const 카테고리 = params.get('카테고리');
-                loadCategoryData(카테고리);
+            if (params.has('searchQuery')) {
+                const 검색어 = params.get('searchQuery');
+                loadCategoryData(검색어);
             }
         });
     });
+</script>
+<script>
+    //팝업창 열기
+    function openPopup(obj) {
+        $(".layer_pop_txt").hide();
+        $(obj).show();
+    }
+
+    // 팝업창 닫기
+    function closePopup(obj) {
+        $(obj).hide();
+        const url = new URL(window.location.href);
+        url.searchParams.delete('searchQuery'); // URL에서 searchQuery 파라미터 제거
+        window.history.pushState({}, '', url.toString().split('#')[0]); // URL에서 해시 부분 제거
+    }
+
 </script>
 </body>
 </html>

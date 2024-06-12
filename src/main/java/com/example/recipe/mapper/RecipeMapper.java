@@ -19,6 +19,8 @@ public interface RecipeMapper {
     List<Ingredient> findIngredients(int 항목일련번호);
     List<Recipe> findRecipes(int 항목일련번호);
     List<Base> findSearchName(@Param("항목일련번호") Integer 항목일련번호,@Param("이름") String 이름);
-    List<Base> findCategory(@Param("카테고리") String 카테고리);
+    List<Base> findCategory(@Param("검색어") String 검색어);
+
+    List<Effect> findEffect(@Param("효과") String 효과);
 
 }
