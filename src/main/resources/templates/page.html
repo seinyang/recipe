@@ -36,7 +36,9 @@
         <div class="containerb">
             <div class="layer_pop_txt" id="pop_txt1">
                 <div class="pop_content">
-                    <div class="title"></div>
+                    <div id="effectTitle" class="title">
+                        <span id="effectName"></span>와(과) 같은 효능을 지닌 차 목록
+                    </div>
                     <ul id="effectsList" class="popup-list grey55">
 
                     </ul>
@@ -85,12 +87,16 @@
                     if (Array.isArray(data) && data.length > 0) {
                         console.log('데이터:', data);
                         data.forEach(function(item) {
-                            popupContent += `<p class="pop_button"><a href="/recipe/${item.항목일련번호}" target="_blank">${item.이름}</a></p>`;
+                            popupContent += `<p class="pop_button"><a onclick="showEffectDetail(${item.항목일련번호}); return false;">${item.이름}</a></p>`;
                         });
                     } else {
                         popupContent = "<p>해당 효과에 대한 데이터가 존재하지 않습니다.</p>";
                     }
                     $('#effectsList').html(popupContent);
+
+                    // 효과 이름을 제목에 적용
+                    $('#effectName').text(효과);
+
                     openPopup('#pop_txt1');
                 },
                 error: function() {
@@ -101,13 +107,14 @@
         }
 
         $('.effect-link').on('click', function(e) {
+
             e.preventDefault();
             const 효과 = $(this).data('effect');
-            const decodedSearchQuery = decodeURIComponent(효과);
-            const url = new URL(window.location.href);
-            url.searchParams.set('searchEffect', decodedSearchQuery);
-            window.history.pushState({}, '', url);
-            loadEffectData(decodedSearchQuery);
+            loadEffectData(효과); // 클릭한 카테고리 데이터 로드
+
+            // URL 업데이트
+            const newUrl = '/?searchQuery=' + encodeURIComponent(효과);
+            history.pushState({ searchEffect: 효과 }, null, newUrl);
         });
 
         window.addEventListener('popstate', function() {
@@ -118,7 +125,12 @@
             }
         });
     });
-
+    // 효과 상세 보기 함수
+    function showEffectDetail(id) {
+        const newUrl = '/recipe/' + id;
+        history.pushState({}, null, newUrl);
+        window.location.href = newUrl;
+    }
     function openPopup(obj) {
         $(".layer_pop_txt").hide();
         $(obj).show();
