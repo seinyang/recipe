@@ -10,7 +10,9 @@
 </head>
 
 <body>
-
+<div id="recipeContent">
+    <!-- 레시피 내용이 동적으로 삽입될 부분 -->
+</div>
 <div>
     <div class="r-card">
         <div class="r-top">
@@ -43,7 +45,7 @@
         </div>
 
         <!-- 검색 결과 팝업 -->
-        <div id="searchPopup" class="search-popup" onclick="closePopup(event)">
+        <div id="searchPopup" class="search-popup" onclick="closePopup1(event)">
             <div class="search-results" id="searchResults">
                 <!-- 여기에 검색 결과가 동적으로 표시됩니다. -->
             </div>
@@ -85,7 +87,7 @@
                 });
             }
 
-            function closePopup(event) {
+            function closePopup1(event) {
                 if (event.target.id === 'searchPopup') {
                     document.getElementById('searchPopup').style.right = '-300px';
                 }
@@ -215,15 +217,20 @@
         <div class="pop_content">
             <ul class="popup-list grey55" id="popup-list">
             </ul>
-            <div>
-                <a class="close_btn" href="javascript:void(0);" onclick="closePopup('#pop_txt1')">닫기</a>
-            </div>
+            <div><a class="close_btn" href="javascript:void(0);" onclick="closePopup('#pop_txt1')">닫기</a></div>
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
+        // 팝업 닫기 버튼에 대한 클릭 이벤트 핸들러 등록 (이벤트 위임 사용)
+        $(document).on('click', '.close_btn', function(event) {
+            event.preventDefault(); // 기본 동작 방지
+            console.log('팝업 닫기 버튼이 클릭되었습니다.'); // 콘솔에 메시지 출력
+            closePopup('#pop_txt1');
+        });
+
+        // loadCategoryData 함수 정의
         function loadCategoryData(검색어) {
             const encodedSearchQuery = encodeURIComponent(검색어);
             console.log('클릭한 카테고리:', encodedSearchQuery); // 클릭한 카테고리 콘솔 출력
@@ -238,7 +245,7 @@
                         console.log('데이터:', data); // 받아온 데이터 콘솔 출력
                         // 받아온 데이터를 화면에 표시
                         data.forEach(function(item) {
-                            popupContent += `  <p class="pop_button"><a href="/recipe/${item.항목일련번호}" target="_blank" >${item.이름}</a></p>`;
+                            popupContent += `<p class="pop_button" onclick="showRecipe('${item.항목일련번호}')">${item.이름}</p>`;
                         });
                     } else {
                         popupContent = "<p>해당 카테고리에 대한 데이터가 존재하지 않습니다.</p>";
@@ -249,45 +256,145 @@
                 error: function() {
                     console.error('데이터를 불러오는 중 오류가 발생했습니다.');
                     $('#popup-list').html("<p>데이터를 불러오는 중 오류가 발생했습니다.</p>");
-
                 }
             });
         }
 
-        // 카테고리 링크 클릭 시 팝업 열기
-        $('.category-link').on('click', function(e) {
-            e.preventDefault();
-            const 검색어 = $(this).data('category');
-            const decodedSearchQuery = decodeURIComponent(검색어); // 클릭한 카테고리를 디코딩
-            const url = new URL(window.location.href); // 수정: 현재 URL을 가져오도록 변경
-            url.searchParams.set('searchQuery', decodedSearchQuery); // 디코딩된 카테고리를 URL에 설정
-            window.history.pushState({}, '', url);
-            loadCategoryData(decodedSearchQuery); // 디코딩된 카테고리를 사용하여 데이터 로드
+        $('.category-link').click(function(event) {
+            event.preventDefault(); // 기본 동작(링크 이동) 방지
+
+            // 클릭한 요소의 data-category 속성 값을 가져옴
+            const category = $(this).data('category');
+
+            // URL 업데이트
+            const newUrl = '/?searchQuery=' + encodeURIComponent(category);
+            history.pushState({ category: category }, null, newUrl);
+
+            // 서버에 데이터 요청 및 화면 업데이트
+            loadCategoryData(category);
         });
 
-
-        window.addEventListener('popstate', function() {
-            const params = new URLSearchParams(window.location.search);
-            if (params.has('searchQuery')) {
-                const 검색어 = params.get('searchQuery');
-                loadCategoryData(검색어);
+        // 팝업창 닫기 이벤트 등록
+        $(window).on('popstate', function(event) {
+            const currentState = history.state;
+            if (!currentState || !currentState.category) {
+                closePopup('#pop_txt1');
             }
         });
     });
-</script>
-<script>
-    //팝업창 열기
+
+    // 팝업창 열기
     function openPopup(obj) {
+        console.log("팝업 열기:", obj); // 팝업 열기 확인
         $(".layer_pop_txt").hide();
         $(obj).show();
     }
 
     // 팝업창 닫기
     function closePopup(obj) {
-        $(obj).hide();
+        console.log("팝업 닫기:", obj); // 팝업 닫기 확인
+        const element = $(obj);
+        console.log("요소 확인:", element); // 요소 확인
+        element.hide(); // jQuery hide() 메서드 사용
         const url = new URL(window.location.href);
-        url.searchParams.delete('searchQuery'); // URL에서 searchQuery 파라미터 제거
+        const searchParams = new URLSearchParams(url.search);
+        searchParams.delete('searchQuery'); // URL에서 searchQuery 파라미터 제거
+        url.search = searchParams.toString();
         window.history.pushState({}, '', url.toString().split('#')[0]); // URL에서 해시 부분 제거
+
+        // 검색 결과 초기화
+        $('#searchInput').val('');
+        $('#searchResults').empty();
+        $('#searchPopup').hide();
+    }
+
+    function showRecipe(항목일련번호) {
+        const newUrl = '/recipe-data/' + 항목일련번호; // 데이터 요청을 위한 URL
+        history.pushState({}, null, '/recipe/' + 항목일련번호); // URL 변경
+
+        $.ajax({
+            url: newUrl,
+            type: 'GET',
+            success: function(data) {
+                console.log(data);
+                displayRecipe(data);
+            },
+            error: function() {
+                console.error('데이터 요청 중 에러가 발생했습니다.');
+            }
+        });
+    }
+
+    function displayRecipe(data) {
+        let recipeContent = `
+        <div>
+            <div class="r-card tac">
+                <div class="r-nevi-icon">
+                    ${data.base.항목일련번호 > 1 ?
+            `<div style="visibility: visible;">
+                            <a href="/recipe/${data.base.항목일련번호 - 1}" class="fs32 grey55"><</a>
+                        </div>` :
+            `<div style="visibility: hidden;">
+                            <a class="fs32 grey55"><</a>
+                        </div>`
+        }
+                    <div id="currentItemNumber" class="fs36 lsm25 fw1 mt2 grey55">${data.base.항목일련번호}</div>
+                    <div>
+                        <a href="/recipe/${data.base.항목일련번호 + 1}" class="fs32 grey55">></a>
+                    </div>
+                </div>
+                <div class="ulm"></div>
+                <div>
+                    <div id="category" class="fs24 lsm10 mt1 grey77">${data.base.카테고리}</div>
+                    <div id="recipeName" class="fs48 lsm25 mtm05 mb1">${data.base.이름}</div>
+                </div>
+                <div id="effects" class="r-effect">
+                    ${data.effect.map(effect => `
+                        <div class="r-effect-round r-c-bg1">
+                            <a href="#;" class="effect-link" data-effect="${effect.효과}" style="color:white;">${effect.효과}</a>
+                        </div>`).join('')}
+                </div>
+                <div class="containerb">
+                    <div class="layer_pop_txt" id="pop_txt1">
+                        <div class="pop_content">
+                            <div class="title"></div>
+                            <ul id="effectsList" class="popup-list grey55"></ul>
+                            <div><a class="close_btn" href="javascript:void(0);" onclick="closePopup('#pop_txt1')">닫기</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fw5 fs24 grey77 mt2"> 재료</div>
+                <div class="ulm"></div>
+                <div id="ingredients">
+                    ${data.ingredient.map(ingredient => `
+                        <div class="r-icon lsm10 mt05">
+                            <div class="r-icond">
+                                <img src="/imgs/${ingredient.목록아이콘}">
+                            </div>
+                            <div class="tal grey55">${ingredient.재료목록}</div>
+                        </div>`).join('')}
+                </div>
+                <div id="mainImage" class="r-image">
+                    <img src="/imgs/${data.base.메인이미지}">
+                </div>
+                <div class="fw5 fs24 grey77">만드는 순서</div>
+                <div class="ulm"></div>
+                <div id="recipeStepsContainer">
+                    ${data.recipe.map(step => `
+                        <div class="tal grey55 pl2 pr2">
+                            <span>${step.조리순서}</span> <span>${step.조리법}</span>
+                        </div>`).join('')}
+                </div>
+                <div class="ulm"></div>
+                <a href="/" class="grey55">
+                    <div class="r-main-btn mt2 mb2">처음으로</div>
+                </a>
+            </div>
+        </div>`;
+
+        $('#recipeContent').html(recipeContent);
+        // 팝업을 닫기 위해 closePopup 함수 호출
+        closePopup('#pop_txt1');
     }
 
 </script>

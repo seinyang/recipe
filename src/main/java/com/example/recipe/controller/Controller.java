@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Controller
 @RequiredArgsConstructor
@@ -38,6 +40,22 @@ public class Controller {
         return "popup";
     }
 
+    @GetMapping("/recipe-data/{id}")
+    @ResponseBody
+    public Map<String, Object> getRecipeData(@PathVariable("id") int id) {
+        Map<String, Object> responseData = new HashMap<>();
+        Base base = recipeService.getBase(id);
+        List<Effect> effect = recipeService.getEffects(id);
+        List<Ingredient> ingredient = recipeService.getIngredients(id);
+        List<Recipe> recipe = recipeService.getRecipes(id);
+
+        responseData.put("base", base);
+        responseData.put("effect", effect);
+        responseData.put("ingredient", ingredient);
+        responseData.put("recipe", recipe);
+
+        return responseData;
+    }
 
     @GetMapping("/recipe/{id}")
     public String getRecipe(@PathVariable("id")int id, Model model){
